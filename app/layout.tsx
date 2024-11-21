@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/widgets/app-sidebar";
+import NextAuthProvider from "@/components/wrappers/SessionWrapper";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -19,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -28,7 +31,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        {/* the auth provider to grant access to session variable through the page*/}
+        <NextAuthProvider>
+          {/* grant access to the side bar in all states and pages */}
+          <SidebarProvider>
+            {/* obviously the actual side bar  */}
+        <AppSidebar /> 
+            <main className="w-full h-full">
+              {/* side bar trigger button */}
+          <SidebarTrigger />
+          {children}
+          </main>
+        </SidebarProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );
