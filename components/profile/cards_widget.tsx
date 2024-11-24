@@ -1,5 +1,4 @@
 "use client"
-
 import { Blocks, ChevronDown, ChevronUp, Plus, Trash, Check } from "lucide-react"
 import { Input } from "../ui/input"
 import { useState } from "react"
@@ -7,6 +6,7 @@ import { useSession } from "next-auth/react"
 import DisplayFlashCards from "./display_user_cards"
 import { DIFFICULTIES, LANGUAGES } from "@/app/data/standard_data"
 
+//* type and interfaces
 interface Question {
   question: string;
   options: string[];
@@ -22,8 +22,12 @@ interface FlashCard {
     ownerId: string,
 }
 
-export default function CardsWidget({userId}:{userId: string}) {
-    const {data: user} = useSession()
+
+//* the flash card widget body
+export default function CardsWidget({ userId }: { userId: string }) {
+    //* get session data
+    const { data: user } = useSession()
+    //* vars for managing state
     const [isCreating, setIsCreating] = useState(false)
     const [isEditingCardId, setEditingCardId] = useState("")
     const [title, setTitle] = useState("")
@@ -37,9 +41,18 @@ export default function CardsWidget({userId}:{userId: string}) {
     const [correctOption, setCorrectOption] = useState<number>(0)
     const [userCards, setUserCards] = useState(user?.user.flash_cards)
 
+    //* clear fields
+    const clearAllFields = () => {
+        setTitle("")
+        setDescription("")
+        setSelectedDifficulty("")
+        setSelectedLanguage("")
+        setQuestions([])
+        setIsCreating(false)
+        setEditingCardId("")
+    }
 
-
-    //* adding questions function
+    //* adding questions to the flash card 
     const addQuestion = () => {
         if (currentQuestion && options.some(opt => opt.trim() !== "")) {
             setQuestions([...questions, {
@@ -47,6 +60,7 @@ export default function CardsWidget({userId}:{userId: string}) {
                 options: options.filter(opt => opt.trim() !== ""),
                 correctOption
             }])
+            //* reset the options and correct answer for the next question
             setCurrentQuestion("")
             setOptions([""])
             setCorrectOption(0)
@@ -66,16 +80,6 @@ export default function CardsWidget({userId}:{userId: string}) {
         }
     }
 
-    //* clear fields
-    const clearAllFields = () => {
-        setTitle("")
-        setDescription("")
-        setSelectedDifficulty("")
-        setSelectedLanguage("")
-        setQuestions([])
-        setIsCreating(false)
-        setEditingCardId("")
-    }
 
     //* create the flash card
     const createCard = async (flashCardData: any) => {
@@ -87,12 +91,15 @@ export default function CardsWidget({userId}:{userId: string}) {
                   },
                   body: JSON.stringify(flashCardData),
             })
-    
+        
+        //* get the data from the response 
             const data = await response.json();
-            if (response.ok) {
+        if (response.ok) {
+                //* if data is ok (success) then update the current data
                 setUserCards((prev: any) => [...prev, data.card])
             }
     }
+
 
     //* delete a flash card
     const deleteFlashCardFromTheDataBase = async (cardId: string) => {
@@ -182,16 +189,19 @@ export default function CardsWidget({userId}:{userId: string}) {
             {/* Create widget header */}
             <div 
                 onClick={() => openCreateMode()}
-                className="border border-solid rounded-2xl py-5 px-6 flex justify-between cursor-pointer hover:bg-gray-50 transition-all">
+                className="border border-solid rounded-2xl py-5 px-6 flex justify-between hover:bg-background/10 cursor-pointer transition-all">
                 <h1 className="text-lg font-medium">Create a new Flash card</h1>
                 <Blocks className="text-blue-600" />
             </div>
 
             {/* Creation form */}
-            {isCreating && (
-                <div className="border border-solid rounded-2xl my-4 px-6 py-4 space-y-6 bg-white shadow-sm">
+                <div className={`border border-solid rounded-2xl px-6 space-y-6 shadow-sm duration-300 transition-all overflow-hidden ${
+                isCreating ? " opacity-100 my-4  py-4" : "h-0 opacity-0"
+                    }`}>
+                {isCreating && (
+                    <>
                     <div className="space-y-4">
-                        {/* Basic Information */}
+                        {/* Basic Information title - description*/}
                         <Input 
                             placeholder="Enter card title..."
                             value={title}
@@ -202,27 +212,32 @@ export default function CardsWidget({userId}:{userId: string}) {
                             placeholder="Enter card description..."
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            className="w-full min-h-[100px] p-2 rounded-lg border resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
+                            className="w-full min-h-[100px] p-2 rounded-lg border bg-background resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            
+
                         
-                        {/* Selections */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* select difficulty for the card */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-background">
                             <select 
                                 value={selectedDifficulty}
                                 onChange={(e) => setSelectedDifficulty(e.target.value)}
-                                className="w-full p-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                className="w-full p-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 bg-background">
                                 <option value="">Select Difficulty</option>
                                 {DIFFICULTIES.map(diff => (
                                     <option key={diff.value} value={diff.value}>
                                         {diff.label}
                                     </option>
                                 ))}
-                            </select>
+                                </select>
+                                
 
+
+                            {/* select language for the card  */}
                             <select 
                                 value={selectedLanguage}
                                 onChange={(e) => setSelectedLanguage(e.target.value)}
-                                className="w-full p-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                className="w-full p-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 bg-background">
                                 <option value="">Select Language</option>
                                 {LANGUAGES.map(lang => (
                                     <option key={lang.value} value={lang.value}>
@@ -262,6 +277,9 @@ export default function CardsWidget({userId}:{userId: string}) {
                                             <p className="font-medium">{q.question}</p>
                                         </div>
                                         <div className="flex items-center gap-2">
+
+
+                                            {/* delete a question button */}
                                             <button 
                                                 onClick={(e) => {
                                                     e.stopPropagation()
@@ -342,6 +360,7 @@ export default function CardsWidget({userId}:{userId: string}) {
                                 </div>
                             ))}
                             
+                                {/* add a new question */}
                             <button
                                 onClick={addQuestion}
                                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors w-full"
@@ -362,8 +381,9 @@ export default function CardsWidget({userId}:{userId: string}) {
                         {isEditingCardId != ""? "Edit Flash Card" : "Create Flash Card"}
                     </button>
                     </div>
+                    </>
+                    )}
                 </div>
-            )}
 
             {/* display the user flash cards */}
             <DisplayFlashCards userFlashCards={userCards} editAction={(id) => openCreateMenuInEditMode(id)} deleteAction={(id) => deleteFlashCardFromTheDataBase(id)} />

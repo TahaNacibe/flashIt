@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
+import { LoaderCircle } from "lucide-react";
 
+const SPINNER_SIZE = 50
+//* just loading simple one
 const LoadingSpinner = () => {
     return (
         <div className="h-1/2 w-full flex justify-center items-center">
@@ -7,7 +10,8 @@ const LoadingSpinner = () => {
             <motion.div
                 animate={{ rotate: 360 }}
                 transition={{repeat:Infinity, duration:1, ease: "linear"}}
-                className="w-16 h-16 border-8 border-t-transparent border-blue-500 border-solid rounded-full">
+                className="rounded-full">
+                <LoaderCircle size={SPINNER_SIZE} />
         </motion.div>
         </div>
     )

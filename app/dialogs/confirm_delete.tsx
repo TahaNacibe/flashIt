@@ -14,7 +14,8 @@ import {
 interface DeleteConfirmationDialogProps {
   title: string;
     itemName: string;
-    itemType: string;
+  itemType: string;
+  deleteCase: boolean;
   trigger: React.ReactNode;
   onConfirm: () => void;
   description?: string;
@@ -25,29 +26,43 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
   itemName,
     trigger,
   itemType,
+  deleteCase,
   onConfirm,
 }) => {
+  console.log("--------> ",itemName)
   return (
     <AlertDialog>
+
+      {/* the trigger is the widget that will show the dialog box */}
       <AlertDialogTrigger asChild>
         {trigger}
       </AlertDialogTrigger>
+
+      {/* the content of the dialog box */}
       <AlertDialogContent className="">
         <AlertDialogHeader>
-                  <AlertDialogTitle>
+          {/* title */}
+          <AlertDialogTitle>
                       {title}
           </AlertDialogTitle>
+          {/* description */}
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your {itemType} '{<strong>{itemName}</strong>}'  and remove it from our servers
+            {deleteCase
+              ? (<>
+              This action cannot be undone. This will permanently delete your {itemType} '{(<strong>{itemName}</strong>)}'  and remove it from our servers
+              </>)
+            : 'would you like to sign out of your account'}
           </AlertDialogDescription>
         </AlertDialogHeader>
+
+        {/* button */}
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction 
             onClick={onConfirm}
             className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
           >
-            Delete
+            {deleteCase? "Delete" : "Log Out"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

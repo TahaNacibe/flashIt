@@ -25,14 +25,15 @@ const SectionButtonWidget: React.FC<SectionButtonProps> = ({
         flex items-center gap-3
         transition-all duration-300
         hover:bg-gray-100 rounded-lg
-        ${isActive ? 'text-blue-600' : 'text-gray-600 hover:text-gray-900'}
+        dark:hover:bg-gray-800 
+        ${isActive ? 'text-blue-600' : 'text-gray-600 hover:text-gray-900 dark:text-white dark:hover:text-white'}
       `}
     >
       {/* Icon wrapper */}
       <div className={`
         transition-transform duration-300
         group-hover:scale-110
-        ${isActive ? 'text-blue-600' : 'text-gray-500'}
+        ${isActive ? 'text-blue-600' : 'text-gray-500 dark:text-white'}
       `}>
         {icon}
       </div>
@@ -41,7 +42,7 @@ const SectionButtonWidget: React.FC<SectionButtonProps> = ({
       <span className={`
         text-sm font-medium
         transition-colors duration-300
-        ${isActive ? 'text-gray-900' : 'text-gray-600'}
+        ${isActive ? 'text-gray-900 dark:text-gray-400' : 'text-gray-600 dark:text-white'}
       `}>
         {name}
       </span>

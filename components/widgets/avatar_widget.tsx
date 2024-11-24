@@ -36,10 +36,10 @@ export function AvatarWidget({ imageUrl, userName, isHidden }: { imageUrl: strin
       //* in case no image was provided show that widget
     return (
         <div className="flex gap-2">
-        <div className="rounded-full h-7 w-7 bg-blue-900 text-white items-center text-center flex justify-center font-medium text-sm">
+        <div className="rounded-full h-8 w-8 bg-blue-900 text-white items-center text-center flex justify-center font-medium text-sm">
           <span>{ getNameParts() }</span>
         </div>
-        <h2 className={`${isHidden ? "opacity-0 w-0" : "opacity-100 w-auto"}`}>Guest User</h2>
+        <h2 className={`${isHidden ? "hidden" : "block"}`}>Guest User</h2>
         </div>
       )
     }

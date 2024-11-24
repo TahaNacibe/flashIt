@@ -10,8 +10,9 @@ declare module 'next-auth' {
         email?: string
         image?: string
         flash_cards?: string[]
-        up_votes_count?: number
+        up_votes_count?: string[]
         saved_flash_cards?: string[]
+        user_collections?:string[]
       }
     }
   }

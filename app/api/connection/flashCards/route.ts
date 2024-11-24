@@ -1,40 +1,12 @@
+import connectToDataBase from "@/lib/connect_to_db";
 import FlashCard from "@/schema/flash_card";
 import profile from "@/schema/profile";
-import { error } from "console";
 import mongoose from "mongoose";
-import { NextApiRequest, NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
-// Helper function for error handling
-const handleError = (error: unknown, message: string) => {
-    console.error(`${message}:`, error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    return NextResponse.json(
-      { error: message, details: errorMessage },
-      { status: 500 }
-    );
-};
-  
-
-const connectToDataBase = async () => {
-      //* check if connection already exist
-      if (mongoose.connections[0].readyState) {
-        return;
-    }
-
-    //* connect if no connection exist 
-    try {
-        //* if connected print connected
-        await mongoose.connect(process.env.MONGODB_URI!)
-    } catch (error) {
-        //* else throw an error 
-        console.error("Error connecting to database:", error);
-        handleError(error,"Failed to connect to mongo db")
-    }
-}
 
 
-//* POST to create the item 
+//* POST: request to create the item 
 const POST = async (req: NextRequest) => {
     await connectToDataBase()
     //* create a new flash card
@@ -68,7 +40,7 @@ const POST = async (req: NextRequest) => {
 
 }
 
-//* get to get the items or specific item by id or ids, mostly ids i guess
+//* GET: request to get the items or specific item by id or ids, mostly ids i guess
 const GET = async (req: NextRequest) => {
     try {
         // Connect to database
@@ -77,10 +49,10 @@ const GET = async (req: NextRequest) => {
         // Get ids from query parameters
         const { searchParams } = new URL(req.url);
         const idsParam = searchParams.get('ids');
+        const idPram = searchParams.get("cardId")
 
         // Parse ids if provided
-        const ids = idsParam ? idsParam.split(',') : null;
-        // const idArray = Object.values(ids)
+        const ids = idsParam ? idsParam.split(',').filter(id => mongoose.Types.ObjectId.isValid(id)) : null;
         // Fetch cards
         let response;
         if (ids && ids.length > 0) {
@@ -94,13 +66,27 @@ const GET = async (req: NextRequest) => {
             });
         }
 
-        // Fetch all cards
-        response = await FlashCard.find({}).sort({ updatedAt: 1 });
-        
-        return NextResponse.json({
-            message: "All cards were fetched",
-            response
-        });
+        //* fetch a single card 
+        if (idPram && mongoose.Types.ObjectId.isValid(idPram)) {
+            response = await FlashCard.findById(idPram)
+            return NextResponse.json(
+                {
+                    message: "card fetched ",
+                    card: response
+                }
+            )
+        }
+
+        // Fetch all cards if no id was sent
+        if (!idPram && !ids) {
+            response = await FlashCard.find({}).sort({ updatedAt: 1 });
+            
+            return NextResponse.json({
+                message: "All cards were fetched",
+                response
+            });
+            
+        }
 
     } catch (error) {
         console.error("Error fetching cards:", error);
@@ -115,6 +101,8 @@ const GET = async (req: NextRequest) => {
     }
 }
 
+
+//* DELETE: request to delete an card from db and remove it's id from it's user 
 const DELETE = async (req: NextRequest) => {
     try {
         await connectToDataBase()
@@ -146,6 +134,7 @@ const DELETE = async (req: NextRequest) => {
 }
 
 
+//* PUT: request to update an existing item
 const PUT = async (req: NextRequest) => {
     try {
         await connectToDataBase()

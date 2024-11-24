@@ -1,14 +1,15 @@
 "use client"
 import { useSession } from "next-auth/react"
 import { useState } from "react"
-import { Folder, WalletCards, ThumbsUp } from "lucide-react"
+import { Folder, WalletCards, ThumbsUp, CreditCard } from "lucide-react"
 import CardsWidget from "@/components/profile/cards_widget"
-import CollectionsWidget from "@/components/profile/collections_widget"
-import { Progress } from "@radix-ui/react-progress"
+import CollectionsWidget from "@/components/widgets/collections_widget"
 import LoadingSpinner from "@/components/animation/loading"
 import SectionButtonWidget from "@/components/widgets/sections_buttons"
+import SignInPage from "../SignIn/page"
 
 export default function ProfilePage() {
+    //* vars 
     const [activeSection, setActiveSection] = useState("Cards")
     const { data: session } = useSession()
 
@@ -32,6 +33,11 @@ export default function ProfilePage() {
         return <SectionButtonWidget name={name} icon={icon} isActive={activeSection === name} onClick={() => setActiveSection(name)}  />
     }
 
+    //* if session don't exist 
+    if (!session) {
+        return <SignInPage />
+    }
+
     return (
         <section className="w-auto h-screen mx-6 my-4">
             {/* Profile Section */}
@@ -40,10 +46,10 @@ export default function ProfilePage() {
                 <div className="w-full h-full bg-blue-600 rounded-2xl relative">
                     {/* Profile Widget */}
                     <div className="h-28 -bottom-16 absolute m-6 flex w-full">
-                        <div className="rounded-full ring-4 ring-white w-28 h-28">
+                        <div className="rounded-full ring-8 ring-white dark:ring-background w-28 h-28">
                             <img src={session?.user.image} alt='' className="rounded-full w-28 h-28" />
                         </div>
-                        <div>
+                        <div className="pl-2">
                             <h1 className="text-white font-medium text-xl">
                                 {session?.user.name}
                             </h1>
@@ -52,7 +58,7 @@ export default function ProfilePage() {
                             </h3>
                         </div>
                         <div className="right-8 bottom-12 absolute rounded-full px-2 py-1 flex gap-2 text-white">
-                            <ThumbsUp size={20} /> {session?.user.up_votes_count}
+                            <CreditCard size={20} /> {(session?.user.flash_cards??[]).length}
                         </div>
                     </div>
                 </div>
@@ -66,7 +72,11 @@ export default function ProfilePage() {
 
             {/* Show active section */}
             {
-                !isSessionLoading()? (<LoadingWidget />) :(activeSection === "Cards" ? <CardsWidget userId={session?.user.id!} /> : <CollectionsWidget />)
+                !isSessionLoading()
+                    ? (<LoadingWidget />)
+                    : (activeSection === "Cards"
+                        ? <CardsWidget userId={session?.user.id!} />
+                        : <CollectionsWidget userId={session?.user.id!} collectionsIds={session?.user.user_collections ?? []} />)
             }
         </section>
     )

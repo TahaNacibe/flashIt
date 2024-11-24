@@ -30,6 +30,7 @@ export const authOptions: NextAuthOptions = {
 
         if (profile) {
           session.user.id = profile.userId
+          session.user.user_collections = profile.user_collections
           session.user.flash_cards = profile.flash_cards;
           session.user.up_votes_count = profile.up_votes_count;
           session.user.saved_flash_cards = profile.saved_flash_cards;
@@ -55,7 +56,7 @@ export const authOptions: NextAuthOptions = {
         await Profile.create({
           userId: message.user.id,
           flash_cards: [],
-          up_votes_count: 0,
+          up_votes_count: [],
           saved_flash_cards: [],
         });
 

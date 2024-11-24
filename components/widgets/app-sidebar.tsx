@@ -1,91 +1,124 @@
 "use client";
 
 import { useState } from "react";
-import { Home, Search, Settings, LogOut, Compass, Send, LifeBuoy } from "lucide-react";
-
+import { Home, Search, Settings, LogOut, Compass } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { AvatarWidget } from "./avatar_widget";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
+import DeleteConfirmationDialog from "@/app/dialogs/confirm_delete";
+import { usePathname } from "next/navigation";
 
-// Menu items.
+// Menu items excluding logout since we'll handle it separately
 const sectionItems = [
   {
-    title: "Home",
-    url: "/Home",
+    title: "Profile",
+    url: "/Profile",
     icon: Home,
   },
   {
     title: "Search",
-    url: "#",
+    url: "/Search",
     icon: Search,
   },
   {
     title: "Discover",
-    url: "#",
+    url: "/",
     icon: Compass,
   },
   {
     title: "Settings",
-    url: "#",
+    url: "/Settings",
     icon: Settings,
-  },
-  {
-    title: "Log Out",
-    url: "#",
-    icon: LogOut,
   },
 ];
 
-
 export function AppSidebar() {
-  const [activePage, setActivePage] = useState("Home")
-
-  //* get the data for the state
+  
+  //* get the data for the state of the session and the side bar state
   const { data: session } = useSession();
-  const { state } = useSidebar()
+  const { state } = useSidebar();
+  const pathname = usePathname();
+  //* vars to manage the state
+  const [activePage, setActivePage] = useState(pathname);
+
+
+  const handleLogout = async () => {
+    try {
+      await signOut({ callbackUrl: '/SignIn' });
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+  console.log(pathname)
 
   return (
-    <Sidebar
-      collapsible="icon">
+    <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
+              {/* Regular menu items */}
               {sectionItems.map((item) => (
-                <SidebarMenuItem key={item.title} className="pb-1" >
-                  <SidebarMenuButton asChild onClick={() => setActivePage(item.title)} isActive={activePage === item.title}>
-                    <a href={item.url} className="">
+                <SidebarMenuItem key={item.title} className="pb-1">
+                  <SidebarMenuButton
+                    asChild
+                    onClick={() => setActivePage(item.url)}
+                    isActive={activePage === item.url}
+                  >
+                    <Link href={item.url} className="">
                       <item.icon />
                       <span className="">{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+
+              {/* Logout item with confirmation dialog */}
+              <SidebarMenuItem className="pb-1">
+                <DeleteConfirmationDialog
+                  title="Sign Out"
+                  itemName=""
+                  itemType=""
+                  deleteCase={false}
+                  onConfirm={handleLogout}
+                  trigger={
+                    <SidebarMenuButton
+                      asChild
+                      onClick={() => {}} // Dialog handles the click
+                      isActive={activePage === "Log Out"}
+                    >
+                      <div className="flex items-center gap-2 w-full cursor-pointer">
+                        <LogOut />
+                        <span>Log Out</span>
+                      </div>
+                    </SidebarMenuButton>
+                  }
+                />
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
+      {/* profile holder section */}
       <SidebarFooter>
-        <Link href={"/Profile"}>
-        <AvatarWidget
-          imageUrl={session?.user.image}
-          userName={session?.user.name}
-          isHidden={state === "collapsed"} // Pass collapsible state
-        />
+        <Link href="/Profile">
+          <AvatarWidget
+            imageUrl={session?.user?.image}
+            userName={session?.user?.name}
+            isHidden={state === "collapsed"}
+          />
         </Link>
       </SidebarFooter>
     </Sidebar>
