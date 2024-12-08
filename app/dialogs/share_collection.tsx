@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label"
 
 export function DialogCloseButton({ collectionId }: { collectionId: string }) {
 
-    
+    //* copy the link to the collection
    async function copyText(){
                 // Copy text to clipboard using Clipboard API
                 await navigator.clipboard.writeText(`http://localhost:3000/collection?collectionId=${collectionId}`);
