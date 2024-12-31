@@ -2,7 +2,7 @@ import connectToDataBase from "@/lib/connect_to_db"
 import FlashCard from "@/schema/flash_card"
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     //* Connect to DB
     await connectToDataBase();

@@ -50,7 +50,7 @@ const POST = async (req: NextRequest) => {
      await newCollectionFolder.save()
  
      // add the collection id to the user list
-     const updateProfile = await profile.findOneAndUpdate({userId: ownerId}, {
+     await profile.findOneAndUpdate({userId: ownerId}, {
          $addToSet : {"user_collections":newCollectionFolder._id}
      })
  
@@ -112,7 +112,7 @@ const DELETE = async (req: NextRequest) => {
         }
         const deletedCollection = await CollectionItem.findByIdAndDelete(id)
         //* delete the collection from the user data
-        const userDataUpdate = await profile.findOneAndUpdate({ userId: ownerId }, {
+        await profile.findOneAndUpdate({ userId: ownerId }, {
             $pull : {"user_collections":id}
         })
 

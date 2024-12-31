@@ -5,7 +5,6 @@ import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/widgets/app-sidebar";
 import NextAuthProvider from "@/components/wrappers/SessionWrapper";
-import { useEffect, useState } from "react";
 import { ThemeScript } from "@/lib/theme-script";
 import { ThemeProvider } from "./theme_provider";
 

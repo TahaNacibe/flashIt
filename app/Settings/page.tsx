@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
-import { Bell, User, Shield, Moon, Sun, Smartphone, Plus, Camera } from "lucide-react"
+import { Bell, User, Shield, Moon, Sun, Smartphone, Camera } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
 import { Label } from "@/components/ui/label"
@@ -19,8 +19,8 @@ import { useToast } from "@/hooks/use-toast"
 import DeleteConfirmationDialog from "../dialogs/confirm_delete"
 import LoadingSpinner from "@/components/animation/loading"
 import { useTheme } from "../theme_provider"
-import SignInPage from "../SignIn/page"
 import Link from "next/link"
+import Image from "next/image"
 
 export default function SettingsPage() {
   //* get params
@@ -173,7 +173,9 @@ export default function SettingsPage() {
           className="absolute inset-0 opacity-0 cursor-pointer z-10"
           disabled={!isEditing}
         />
-        <img
+        <Image
+          width={300}
+          height={300}
           src={previewItemImageView ?? session?.user.image ?? '/user.png'}
           alt="Profile"
           className="w-full h-full object-cover transition-transform group-hover:scale-105"

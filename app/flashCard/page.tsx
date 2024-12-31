@@ -2,7 +2,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Timer, CreditCard, Clock, Info, ChevronRight, Users, Trophy, ThumbsUp,ThumbsDown , Bookmark, ArrowLeft } from "lucide-react";
+import { CreditCard, Clock, Info, Users, Trophy, ThumbsUp,ThumbsDown , Bookmark, ArrowLeft } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import mongoose from "mongoose";
@@ -16,9 +16,18 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import LoadingSpinner from "@/components/animation/loading";
 import { useToast } from "@/hooks/use-toast";
+import { Suspense } from 'react'
 
 
-export default function FlashCardTest() {
+export default function FlashCardTestSuspense() {
+    return (
+        <Suspense>
+      <FlashCardTest />
+    </Suspense>
+    )
+}
+
+function FlashCardTest() {
     //* get params
     const searchParams = useSearchParams();
     const router = useRouter()

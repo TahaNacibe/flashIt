@@ -1,6 +1,7 @@
 "use client"
 
 import { signIn, signOut, useSession } from "next-auth/react"
+import Image from "next/image"
 import { redirect } from "next/navigation"
 import { useState } from "react"
 
@@ -36,7 +37,9 @@ export default function SignInPage() {
         <section className="flex items-center justify-center flex-col min-h-screen gap-12 bg-gradient-to-b to-gray-100 p-4">
             {/* Image container with animation */}
             <div className="w-fill max-w-md transition-transform duration-300 hover:scale-105  sm:overflow-auto md:overflow-clip">
-                <img 
+                <Image
+                    width={500}
+                height={500}    
                     src='log_in.svg' 
                     className="w-full h-auto" 
                     alt='Login illustration'

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FolderClosed, GalleryHorizontalEnd, Trash2Icon, Pencil } from 'lucide-react';
+import { FolderClosed, GalleryHorizontalEnd, Trash2Icon } from 'lucide-react';
 import DeleteConfirmationDialog from '@/app/dialogs/confirm_delete';
 import { ManageCollectionData } from './edit_collection';
 import Link from 'next/link';

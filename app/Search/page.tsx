@@ -7,6 +7,7 @@ import { useState, useEffect, useRef, KeyboardEvent } from "react"
 import { DIFFICULTIES, LANGUAGES } from "../data/standard_data"
 import FolderCard from "@/components/profile/folder_widget"
 import getTheBgColorForTheCollectionFromTheMapList from "@/lib/manage_collection_color"
+import Image from "next/image"
 
 export default function SearchPage() {
   //* consts 
@@ -313,7 +314,9 @@ export default function SearchPage() {
           ) : (
             <div className=" rounded-xl shadow-sm p-12 text-center">
               <div className="max-w-md mx-auto">
-                <img
+                  <Image
+                    width={500}
+                    height={500}
                   src='empty.svg'
                   className="h-48 w-auto mx-auto mb-6 opacity-75"
                   alt='No results found'

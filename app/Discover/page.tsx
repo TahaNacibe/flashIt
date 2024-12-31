@@ -268,7 +268,7 @@ const DiscoverPage = () => {
       </div>
       
 
-      //* didn't work other place for some reason
+      {/* didn't work other place for some reason*/}
       <style jsx>{`
         @keyframes fadeInUp {
           from {

@@ -1,3 +1,4 @@
+import Image from "next/image";
 
   
 export function AvatarWidget({ imageUrl, userName, isHidden }: { imageUrl: string | undefined, userName: string | undefined, isHidden: boolean }) {
@@ -5,7 +6,7 @@ export function AvatarWidget({ imageUrl, userName, isHidden }: { imageUrl: strin
       //* show the profile bottom tile
       return (
         <div className="flex gap-2">
-          <img src={imageUrl} className="w-8 h-8 rounded-full" alt='' />
+          <Image width={300} height={300} src={imageUrl} className="w-8 h-8 rounded-full" alt='' />
           <h2 className={`${isHidden ? "opacity-0 w-0" : "opacity-100 w-auto"}`}>{userName}</h2>
        </div>
       )

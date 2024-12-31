@@ -1,9 +1,8 @@
 "use client"
-
+import { Suspense } from 'react'
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { FolderOpen, Clock, Share2, InfoIcon, Filter, Search, X} from "lucide-react"
-import { COLORS } from "../data/standard_data"
+import { FolderOpen, Clock, InfoIcon, Filter, Search, X} from "lucide-react"
 import { AddFlashCardToCollection } from "@/components/collection/addCardsToCollection"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -29,7 +28,18 @@ interface Collection {
     questions?: any[]
 }
 
-export default function CollectionPage() {
+
+export default function CollectionPageSuspense() {
+    return (
+         <Suspense>
+              <CollectionPage />
+            </Suspense>
+    )
+}
+
+
+
+function CollectionPage() {
     //* consts
     const ICON_SIZE_FOLDER = 24
     const ICON_SIZE = 16
@@ -193,7 +203,7 @@ export default function CollectionPage() {
                             {/* show bottom sheet to add a new collection */}
                             {isTheCurrentUserAOwner() && <AddFlashCardToCollection
                                 collectionData={collection}
-                                onSubmitEffect={(editedCollection: any) => getFullCollectionDetails()} />}
+                                onSubmitEffect={() => getFullCollectionDetails()} />}
                         </div> 
                     </div>
 
@@ -210,16 +220,16 @@ export default function CollectionPage() {
                         {/* Add your content grid/list here */}
                 {collection.collection_cards.map((card: any) => {
                     if (!card.title) {
-                        return <LoadingSpinner />
+                        return <LoadingSpinner key={card._id} />
                     }
                     if (card.title.includes(searchQuery)
                         && card.selectedLanguage.includes(selectedLanguage) 
                         && card.selectedDifficulty.includes(selectedDifficulty.toLowerCase())) {
                         return (
-                            <FlashCardWidget
+                        <FlashCardWidget
                         key={card._id}
-                                id={card._id}
-                                isOnlyShow={false}
+                        id={card._id}
+                        isOnlyShow={false}
                         title={card.title}
                         desc={card.description}
                         isEditable={false}

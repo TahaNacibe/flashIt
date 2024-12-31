@@ -26,7 +26,7 @@ const POST = async (req: NextRequest) => {
 
 
         // add the card to user list
-        const updateProfile = await profile.findOneAndUpdate({userId: ownerId}, {
+        await profile.findOneAndUpdate({userId: ownerId}, {
             $addToSet : {"flash_cards":newFlashCard._id}
         })
 
@@ -119,7 +119,7 @@ const DELETE = async (req: NextRequest) => {
 
         const response = await FlashCard.findByIdAndDelete(flashCardId)
          // remove the card from the user list
-         const updateProfile = await profile.findOneAndUpdate({userId: ownerId}, {
+         await profile.findOneAndUpdate({userId: ownerId}, {
             $pull : {"flash_cards":flashCardId}
         })
         return NextResponse.json({

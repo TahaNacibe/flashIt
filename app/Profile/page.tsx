@@ -1,12 +1,13 @@
 "use client"
 import { useSession } from "next-auth/react"
 import { useState } from "react"
-import { Folder, WalletCards, ThumbsUp, CreditCard } from "lucide-react"
+import { Folder, WalletCards, CreditCard } from "lucide-react"
 import CardsWidget from "@/components/profile/cards_widget"
 import CollectionsWidget from "@/components/widgets/collections_widget"
 import LoadingSpinner from "@/components/animation/loading"
 import SectionButtonWidget from "@/components/widgets/sections_buttons"
 import SignInPage from "../SignIn/page"
+import Image from "next/image"
 
 export default function ProfilePage() {
     //* vars 
@@ -47,7 +48,7 @@ export default function ProfilePage() {
                     {/* Profile Widget */}
                     <div className="h-28 -bottom-16 absolute m-6 flex w-full">
                         <div className="rounded-full ring-8 ring-white dark:ring-background w-28 h-28">
-                            <img src={session?.user.image} alt='' className="rounded-full w-28 h-28" />
+                            <Image width={300} height={300} src={session?.user.image ?? ""} alt='' className="rounded-full w-28 h-28" />
                         </div>
                         <div className="pl-2">
                             <h1 className="text-white font-medium text-xl">

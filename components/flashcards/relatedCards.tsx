@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { useEffect, useState } from "react";
 import { FlashCardWidget } from "../widgets/flash_card_widget";
 import LoadingSpinner from "../animation/loading";
+import Image from "next/image";
 
 
 
@@ -65,7 +66,7 @@ export default function RelatedFlashCards({ cardId, cardLanguage, cardDifficulty
                 </div>
             ) : (
                 <div className="text-center py-10 rounded-xl flex flex-col items-center justify-center">
-                        <img src='empty.svg' className="h-1/5 w-1/5" alt='' />
+                        <Image width={500} height={500} src='empty.svg' className="h-1/5 w-1/5" alt='' />
                         <h1 className="pt-8 text-lg">
                             No FlashCards found
                         </h1>

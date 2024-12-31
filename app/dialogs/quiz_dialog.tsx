@@ -1,4 +1,4 @@
-import { Check, Copy, Timer, X } from "lucide-react"
+import { Check, Timer, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,

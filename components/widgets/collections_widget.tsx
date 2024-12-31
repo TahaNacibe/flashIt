@@ -6,6 +6,7 @@ import FolderCard from "../profile/folder_widget"
 import { ManageCollectionData } from "../profile/edit_collection"
 import LoadingSpinner from "../animation/loading"
 import { Input } from "../ui/input"
+import Image from "next/image"
 
 
 //* collection body widget 
@@ -90,7 +91,7 @@ const CollectionsDisplay = ({ collectionsIds, userId }: { collectionsIds: string
             method: "DELETE"
         })
         if (response.ok) {
-            const data = await response.json()
+            await response.json()
             //* update the local data so we don't need a refresh
             setUserCollections(prev => prev.filter(col => col._id !== targetCollectionId))
             setSearchResult(prev => prev.filter(col => col._id !== targetCollectionId))
@@ -108,7 +109,7 @@ const CollectionsDisplay = ({ collectionsIds, userId }: { collectionsIds: string
     const EmptyListDisplayWidget = () => {
         return (
             <div className="w-full h-full flex items-center justify-items-center justify-center">
-                <img src="cat.svg" className="w-1/4 h-1/4" alt="" />
+                <Image width={500} height={500}  src="cat.svg" className="w-1/4 h-1/4" alt="" />
             </div>
         )
     }

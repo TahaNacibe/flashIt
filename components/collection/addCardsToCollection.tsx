@@ -6,7 +6,6 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -47,7 +46,7 @@ export function AddFlashCardToCollection({collectionData, onSubmitEffect}:{colle
         })
         
         if (response.ok) {
-            const data = await response.json()
+            await response.json()
             onSubmitEffect()
         }
     }
@@ -104,7 +103,7 @@ export function AddFlashCardToCollection({collectionData, onSubmitEffect}:{colle
           <div
             className="relative"
             key={card._id}
-            onClick={(e) => updateFlashCardsInTheCollection(card._id)}
+            onClick={() => updateFlashCardsInTheCollection(card._id)}
           >
                 {selectedFlashCards.includes(card._id) && (
               <div className="w-full h-auto mb-4 bg-black z-50 inset-0 absolute rounded-lg bg-opacity-5 flex items-center justify-center">

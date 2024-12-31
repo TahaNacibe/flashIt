@@ -49,7 +49,7 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
           <AlertDialogDescription>
             {deleteCase
               ? (<>
-              This action cannot be undone. This will permanently delete your {itemType} '{(<strong>{itemName}</strong>)}'  and remove it from our servers
+              This action cannot be undone. This will permanently delete your {itemType} &apos;{(<strong>{itemName}</strong>)}&apos;  and remove it from our servers
               </>)
             : 'would you like to sign out of your account'}
           </AlertDialogDescription>
